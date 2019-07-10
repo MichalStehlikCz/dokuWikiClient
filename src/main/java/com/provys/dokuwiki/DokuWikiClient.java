@@ -94,6 +94,7 @@ public class DokuWikiClient {
      *
      * @param namespace is namespace in which search is done
      * @param depth is depth of search, 0 means unlimited
+     * @return list of pages in given namespace up to specified depth
      */
     @Nonnull
     public List<PageListResult> getPages(String namespace, int depth) {
@@ -107,6 +108,7 @@ public class DokuWikiClient {
      * Get names of pages directly in namespace, conforming to specified criteria
      *
      * @param namespace is namespace in which search is done
+     * @return list of names of pages directly in given namespace (not in sub-namespaces)
      */
     @Nonnull
     public List<String> getPageNames(String namespace) {
@@ -232,6 +234,9 @@ public class DokuWikiClient {
     /**
      * Get list of attachments in given namespace. Depth is set to namespace depth to return just attachments directly
      * in given namespace
+     *
+     * @param namespace is namespace we search attachments in
+     * @return list of attachments directly in given namespace
      */
     public List<AttachmentInfo> getAttachments(String namespace) {
         return getAttachments(namespace, pageIdParser.getDepth(namespace));
@@ -240,6 +245,9 @@ public class DokuWikiClient {
     /**
      * Get list of names of attachments in given namespace. Depth is set to namespace depth to return just attachments
      * directly in given namespace, returns plain filenames
+     *
+     * @param namespace is namespace we search attachments in
+     * @return list of filenames of attachments directly in given namespace
      */
     public List<String> getAttachmentFileNames(String namespace) {
         return getAttachmentsInt(namespace, pageIdParser.getDepth(namespace))
@@ -247,6 +255,13 @@ public class DokuWikiClient {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Stream attachments in given namespace, within specified depth
+     *
+     * @param namespace is namespace we search in
+     * @param depth is maximal depth; absolute value,  root is 1, value 0 means unlimited
+     * @return stream containing attachments found in given namespace
+     */
     private Stream<AttachmentInfo> getAttachmentsInt(String namespace, int depth) {
         return ((XmlRpcArray) xmlRpcClient.invoke("wiki.getAttachments", namespace, Map.of("depth", depth)))
                 .stream()
@@ -259,6 +274,7 @@ public class DokuWikiClient {
      * @param namespace is namespace that should be searched
      * @param depth is depth of sub-spaces to be searched through (absolute from root, not from given namespace);
      *             0 means unlimited
+     * @return list of attachments in given namespace
      */
     public List<AttachmentInfo> getAttachments(String namespace, int depth) {
         return getAttachmentsInt(namespace, depth)

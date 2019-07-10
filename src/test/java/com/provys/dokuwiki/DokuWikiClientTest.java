@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class DokuWikiClientTest {
 
-    private static DokuWikiClient dokuWikiClient = new DokuWikiClient("http://provys-wiki.dcit.cz/lib/exe/xmlrpc.php", "stehlik", "stehlik");
+    private final static DokuWikiClient dokuWikiClient = new DokuWikiClient("http://provys-wiki.dcit.cz/lib/exe/xmlrpc.php", "stehlik", "stehlik");
 
     @Test
     void getVersionTest() {

@@ -8,6 +8,7 @@ import java.util.Objects;
 /**
  * Represents item in result of getPagelist call
  */
+@SuppressWarnings("WeakerAccess")
 public class PageListResult {
 
     static PageListResult parseResponse(XmlRpcStruct pageListResult) {

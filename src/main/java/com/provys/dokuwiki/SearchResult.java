@@ -5,6 +5,7 @@ import com.provys.xmlrpc.XmlRpcStruct;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
+@SuppressWarnings("WeakerAccess")
 public class SearchResult extends PageListResult {
 
     @Nonnull
@@ -23,7 +24,7 @@ public class SearchResult extends PageListResult {
     @Nonnull
     private final String title;
 
-    SearchResult(String snippet, int score, int rev, int size, String id, int mtime, String title) {
+    private SearchResult(String snippet, int score, int rev, int size, String id, int mtime, String title) {
         super(rev, size, id, mtime);
         this.snippet = Objects.requireNonNull(snippet);
         this.score = score;

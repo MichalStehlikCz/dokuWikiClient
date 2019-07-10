@@ -2,9 +2,11 @@ package com.provys.dokuwiki;
 
 import javax.annotation.Nonnull;
 
+@SuppressWarnings("WeakerAccess")
 public class PageIdParser {
 
     /**
+     * @param id is string representing id of page in wiki
      * @return namespace of page (without name)
      */
     @Nonnull
@@ -19,7 +21,7 @@ public class PageIdParser {
      * Get depth of specified namespace.
      *
      * @param namespace is string representing namespace. It should be absolute path (cannot evaluate relative namespace
-     *                  without context). If tehre is leading or trailing :, it is ignored.
+     *                  without context). If there is leading or trailing :, it is ignored.
      * @return depth of namespace (as used in dokuWiki search functions); root level documents (root namespace) has
      * depth 1.
      */
@@ -41,6 +43,7 @@ public class PageIdParser {
     }
 
     /**
+     * @param id is string representing id of page in wiki
      * @return name of page (without namespace)
      */
     @Nonnull

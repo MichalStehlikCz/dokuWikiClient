@@ -6,10 +6,12 @@ import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@SuppressWarnings("WeakerAccess")
 public class PageData {
 
     /**
-     * Parse page data from strucxt, returned from wiki Xml-Rpc call
+     * Parse page data from struct, returned from wiki Xml-Rpc call
+     *
      * @param pageData is struct describing page data retrieved from wiki
      * @return new {@code PageData} object with data found in struct
      */
@@ -30,7 +32,7 @@ public class PageData {
      @Nonnull
      private final LocalDateTime lastModified;
 
-    PageData(String id, int perms, int size, LocalDateTime lastModified) {
+    private PageData(String id, int perms, int size, LocalDateTime lastModified) {
         this.id = Objects.requireNonNull(id);
         this.perms = perms;
         this.size = size;

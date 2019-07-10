@@ -9,6 +9,7 @@ import java.util.Objects;
 /**
  * Provides description of file, uploaded to wiki as attachment. Retrieved via getAttachments.
  */
+@SuppressWarnings("WeakerAccess")
 public class AttachmentInfo {
 
     /**
@@ -39,8 +40,8 @@ public class AttachmentInfo {
     /** permissions of file */
     private final int perms;
 
-    AttachmentInfo(String id, String file, int size, int mtime, LocalDateTime lastModified, boolean isImg,
-                   boolean writable, int perms) {
+    private AttachmentInfo(String id, String file, int size, int mtime, LocalDateTime lastModified, boolean isImg,
+                           boolean writable, int perms) {
         this.id = Objects.requireNonNull(id);
         this.file = Objects.requireNonNull(file);
         this.size = size;
