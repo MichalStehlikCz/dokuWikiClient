@@ -21,6 +21,11 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("WeakerAccess") // DokuWikiClient is published library class
 public class DokuWikiClient {
+    /**
+     * Xml-Rpc client used for communication with wiki. Intentionally kept private, as if any additional methods are
+     * needed, they should be added to DokuWikiClient class rather than implemented by directly accessing Xml-Rpc
+     * client
+     */
     private final XmlRpcClient xmlRpcClient;
     private final PageIdParser pageIdParser = new PageIdParser();
 
@@ -38,6 +43,13 @@ public class DokuWikiClient {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Malformed URL " + url, e);
         }
+    }
+
+    /**
+     * @return pageId parser used by this wiki client
+     */
+    protected PageIdParser getPageIdParser() {
+        return pageIdParser;
     }
 
     /**
@@ -323,5 +335,12 @@ public class DokuWikiClient {
         getAttachmentsInt(namespace, 0)
                 .map(AttachmentInfo::getId)
                 . forEach(this::deleteAttachment);
+    }
+
+    @Override
+    public String toString() {
+        return "DokuWikiClient{" +
+                "xmlRpcClient=" + xmlRpcClient +
+                '}';
     }
 }
