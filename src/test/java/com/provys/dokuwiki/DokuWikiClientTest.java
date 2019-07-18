@@ -104,8 +104,10 @@ class DokuWikiClientTest {
 
     @Test
     void getAttachmentFileNamesTest() {
-        dokuWikiClient.putAttachment("playground:java:testtext.svg", "Test attachment".getBytes(), true);
-        assertThat(dokuWikiClient.getAttachmentFileNames("playground:java")).containsExactly("testtext.svg");
+        dokuWikiClient.putAttachment("playground:java:getfilenames:testtext.svg", "Test attachment".getBytes(),
+                true);
+        assertThat(dokuWikiClient.getAttachmentFileNames("playground:java:getfilenames"))
+                .containsExactly("testtext.svg");
     }
 
     @Test
@@ -118,25 +120,63 @@ class DokuWikiClientTest {
     @Test
     void putAttachmentTest() {
         assertThatCode(() -> dokuWikiClient.putAttachment(
-                "playground:java:testtext.svg", "Test attachment".getBytes(), true))
+                "playground:java:putattachment:testtext.svg", "Test attachment".getBytes(), true))
                 .doesNotThrowAnyException();
         assertThatCode(() -> dokuWikiClient.putAttachment(
-                "playground:java:testtext.svg", "Test attachment 2".getBytes(), true))
+                "playground:java:putattachment:testtext.svg", "Test attachment 2".getBytes(), true))
                 .doesNotThrowAnyException();
         assertThatCode(() -> dokuWikiClient.putAttachment(
-                "playground:java:testtext.svg", "Test attachment 3".getBytes(), false))
+                "playground:java:putattachment:testtext.svg", "Test attachment 3".getBytes(), false))
                 .isInstanceOf(XmlRpcFaultException.class)
                 .hasMessage("File already exists. Nothing done.");
-        assertThat(dokuWikiClient.getAttachment("playground:java:testtext.svg"))
+        assertThat(dokuWikiClient.getAttachment("playground:java:putattachment:testtext.svg"))
+                .containsExactly("Test attachment 2".getBytes());
+    }
+
+    @SuppressWarnings("squid:S2925") // we can only verify if data has been changed with second granularity on wiki
+    @Test
+    void putAttachment2Test() {
+        assertThatCode(() -> dokuWikiClient.putAttachment(
+                "playground:java:putattachment:testtext.svg", "Test attachment".getBytes(), true,
+                true)).doesNotThrowAnyException();
+        assertThat(dokuWikiClient.getAttachment("playground:java:putattachment:testtext.svg"))
+                .containsExactly("Test attachment".getBytes());
+        var attachments1 = dokuWikiClient.getAttachments("playground:java:putattachment");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("", e);
+        }
+        assertThatCode(() -> dokuWikiClient.putAttachment(
+                "playground:java:putattachment:testtext.svg", "Test attachment".getBytes(), true,
+                true)).doesNotThrowAnyException();
+        assertThat(dokuWikiClient.getAttachments("playground:java:putattachment")).isEqualTo(attachments1);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("", e);
+        }
+        assertThatCode(() -> dokuWikiClient.putAttachment(
+                "playground:java:putattachment:testtext.svg", "Test attachment 2".getBytes(), true,
+                true)).doesNotThrowAnyException();
+        assertThat(dokuWikiClient.getAttachments("playground:java:putattachment")).isNotEqualTo(attachments1);
+        assertThatCode(() -> dokuWikiClient.putAttachment(
+                "playground:java:putattachment:testtext.svg", "Test attachment 3".getBytes(), false,
+                true)).isInstanceOf(XmlRpcFaultException.class)
+                .hasMessage("File already exists. Nothing done.");
+        assertThat(dokuWikiClient.getAttachment("playground:java:putattachment:testtext.svg"))
                 .containsExactly("Test attachment 2".getBytes());
     }
 
     @Test
     void deleteAttachmentTest() {
-        dokuWikiClient.putAttachment("playground:java:testtext.svg", "Test attachment".getBytes(), true);
-        assertThatCode(() -> dokuWikiClient.deleteAttachment("playground:java:testtext.svg"))
+        dokuWikiClient.putAttachment("playground:java:deleteattachment:testtext.svg", "Test attachment".getBytes(), true);
+        assertThatCode(() -> dokuWikiClient.deleteAttachment("playground:java:deleteattachment:testtext.svg"))
                 .doesNotThrowAnyException();
-        assertThatCode(() -> dokuWikiClient.deleteAttachment("playground:java:testtext.svg"))
+        assertThatThrownBy(() -> dokuWikiClient.getAttachment("playground:java:deleteattachment:testtext.svg"))
+                .isInstanceOf(XmlRpcFaultException.class)
+                .hasMessage("The requested file does not exist");
+        assertThatCode(() -> dokuWikiClient.deleteAttachment("playground:java:deleteattachment:testtext.svg"))
                 .isInstanceOf(XmlRpcFaultException.class)
                 .hasMessage("Could not delete file");
     }

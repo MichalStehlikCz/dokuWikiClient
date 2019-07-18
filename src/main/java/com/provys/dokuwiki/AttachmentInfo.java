@@ -76,7 +76,7 @@ public class AttachmentInfo {
     /**
      * @return upload date as a timestamp
      */
-    public Integer getMtime() {
+    public int getMtime() {
         return mtime;
     }
 
@@ -104,8 +104,38 @@ public class AttachmentInfo {
     /**
      * @return permissions of file
      */
-    public Integer getPerms() {
+    public int getPerms() {
         return perms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AttachmentInfo)) return false;
+
+        AttachmentInfo that = (AttachmentInfo) o;
+
+        if (getSize() != that.getSize()) return false;
+        if (getMtime() != that.getMtime()) return false;
+        if (getImg() != that.getImg()) return false;
+        if (getWritable() != that.getWritable()) return false;
+        if (getPerms() != that.getPerms()) return false;
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getFile() != null ? !getFile().equals(that.getFile()) : that.getFile() != null) return false;
+        return getLastModified() != null ? getLastModified().equals(that.getLastModified()) : that.getLastModified() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getFile() != null ? getFile().hashCode() : 0);
+        result = 31 * result + getSize();
+        result = 31 * result + getMtime();
+        result = 31 * result + (getLastModified() != null ? getLastModified().hashCode() : 0);
+        result = 31 * result + (getImg() ? 1 : 0);
+        result = 31 * result + (getWritable() ? 1 : 0);
+        result = 31 * result + getPerms();
+        return result;
     }
 
     @Override

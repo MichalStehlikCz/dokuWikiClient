@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -312,6 +313,30 @@ public class DokuWikiClient {
      * @param overwrite indicates if potential existing content should be overwritten
      */
     public void putAttachment(String id, byte[] file, boolean overwrite) {
+        xmlRpcClient.invoke("wiki.putAttachment", id, file, Map.of("ow", overwrite));
+    }
+
+    /**
+     * Put attachment (file) to wiki
+     *
+     * @param id is location where attachment should be put to
+     * @param file is byte array with file content
+     * @param overwrite indicates if potential existing content should be overwritten
+     * @param onlyIfChanged indicates that attachment should be modified only if content has been changed
+     */
+    public void putAttachment(String id, byte[] file, boolean overwrite, boolean onlyIfChanged) {
+        if (onlyIfChanged) {
+            try {
+                var oldFile = getAttachment(id);
+                if (Arrays.equals(file, oldFile)) {
+                    return;
+                }
+            } catch (XmlRpcFaultException e) {
+                if (!e.getMessage().equals("The requested file does not exist")) {
+                    throw new RuntimeException("Error reading old value", e);
+                }
+            }
+        }
         xmlRpcClient.invoke("wiki.putAttachment", id, file, Map.of("ow", overwrite));
     }
 
