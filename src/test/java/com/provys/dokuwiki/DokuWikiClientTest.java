@@ -93,6 +93,16 @@ class DokuWikiClientTest {
     }
 
     @Test
+    void deletePageIfExistsTest() {
+        dokuWikiClient.putPage("playground:java:deletetest", "Delete test");
+        assertThat(dokuWikiClient.getPage("playground:java:deletetest")).isEqualTo("Delete test");
+        dokuWikiClient.deletePageIfExists("playground:java:deletetest");
+        assertThat(dokuWikiClient.getPage("playground:java:deletetest")).isEqualTo("");
+        dokuWikiClient.deletePageIfExists("playground:java:deletetest");
+        assertThat(dokuWikiClient.getPage("playground:java:deletetest")).isEqualTo("");
+    }
+
+    @Test
     void deletePagesTest() {
         dokuWikiClient.putPage("playground:java:deletepages:test1", "Test text");
         dokuWikiClient.putPage("playground:java:deletepages:test2", "Test text 2");

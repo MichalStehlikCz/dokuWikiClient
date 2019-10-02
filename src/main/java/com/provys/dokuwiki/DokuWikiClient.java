@@ -222,12 +222,25 @@ public class DokuWikiClient {
     }
 
     /**
-     * Delete page; wiki does not implement delete as such, call translates to changing content of page to empty
+     * Delete page; wiki does not implement delete as such, call translates to changing content of page to empty. Action
+     * fails if page does not exist
      *
      * @param id is name of page to be removed
      */
     public void deletePage(String id) {
         putPage(id, "");
+    }
+
+    /**
+     * Delete page; wiki does not implement delete as such, call translates to changing content of page to empty. Action
+     * is safe even if page does not exist, but is more expensive than deletePage
+     *
+     * @param id is name of page to be removed
+     */
+    public void deletePageIfExists(String id) {
+        if (!getPage(id).isEmpty()) {
+            putPage(id, "");
+        }
     }
 
     /**
