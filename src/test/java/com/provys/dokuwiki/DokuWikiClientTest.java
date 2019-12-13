@@ -16,8 +16,10 @@ class DokuWikiClientTest {
 
     @Test
     void getNamespaceNames() {
+        dokuWikiClient.putPage("playground:java:getns:start", "Test start text");
         dokuWikiClient.putPage("playground:java:getns:test1", "Test text");
         dokuWikiClient.putPage("playground:java:getns:test2", "Test text 2");
+        dokuWikiClient.putPage("playground:java:getns:sub:start", "Test start text");
         dokuWikiClient.putPage("playground:java:getns:sub:test3", "Test text");
         dokuWikiClient.putPage("playground:java:getns:sub2:test4", "Test text");
         dokuWikiClient.putPage("playground:java:getns:sub2:test5", "Test text");
