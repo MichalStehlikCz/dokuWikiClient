@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class DokuWikiClientTest {
+class DokuWikiClientIT {
 
     private final static DokuWikiClient dokuWikiClient = new DokuWikiClient("http://provys-wiki.dcit.cz/lib/exe/xmlrpc.php", "stehlik", "stehlik");
 

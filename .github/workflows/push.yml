@@ -30,4 +30,4 @@ jobs:
     - name: Build with Maven
       env:
         TOKEN: ${{secrets.GPA}}
-      run: mvn -B verify -Dmaven.test.skip=true --file pom.xml
+      run: mvn -B verify -DskipITs --file pom.xml
